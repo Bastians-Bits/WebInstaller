@@ -47,8 +47,3 @@ app.MapGet("files/{archiveType}", async ([FromBody] Manifest manifest, string ar
 } );
 
 app.Run();
-
-namespace WebInstaller
-{
-    public partial class Program { }
-}
