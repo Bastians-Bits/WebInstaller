@@ -73,3 +73,4 @@ sequenceDiagram
 # Future ideas
 
 * Make /file/{archiveType} architecture dependent to match /installer/{os}
+* Add support for other archive types
