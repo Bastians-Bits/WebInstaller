@@ -4,13 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Model\" />
+    <None Remove="installer\linux\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />
+    <Folder Include="installer\linux\" />
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="WebInstaller.Test.Integration" />
