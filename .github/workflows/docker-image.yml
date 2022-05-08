@@ -11,7 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: debug
-      run: ls source/WebInstaller
     - name: Build the Docker image
-      run: docker build --file Dockerfile --tag webinstaller:$(date +%s) source/WebInstaller
+      run: cd source/WebInstaller && docker build . --tag webinstaller:$(date +%s)
