@@ -74,3 +74,4 @@ sequenceDiagram
 
 * Make /file/{archiveType} architecture dependent to match /installer/{os}
 * Add support for other archive types
+* Remove images size, 700MB is a little bit extreme
