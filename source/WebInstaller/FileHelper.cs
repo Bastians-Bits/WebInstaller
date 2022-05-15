@@ -25,7 +25,6 @@ namespace WebInstaller
 				return await CreateTar(changeset, files);
 			else
 				throw new Exception("Unknown archive type");
-
         }
 
 		protected async Task<byte[]> CreateZip(Changeset changeset, string files, Manifest newManifest)
@@ -49,6 +48,7 @@ namespace WebInstaller
 				using MemoryStream memStream = new(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(newManifest)));
 				await memStream.CopyToAsync(entryStream);
             }
+			manifestEntry.ExternalAttributes = manifestEntry.ExternalAttributes | (Convert.ToInt32("664", 8) << 16);
 			// Files to delete
 			ZipArchiveEntry deleteEntry = zipArchive.CreateEntry("/removed.json", CompressionLevel.Fastest);
 			using (Stream entryStream = deleteEntry.Open())
@@ -58,6 +58,7 @@ namespace WebInstaller
 				using MemoryStream memStream = new(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(deleteChangeset)));
 				await memStream.CopyToAsync(entryStream);
 			}
+			deleteEntry.ExternalAttributes = deleteEntry.ExternalAttributes | (Convert.ToInt32("664", 8) << 16);
 
 			zipArchive.Dispose();
 
@@ -70,4 +71,3 @@ namespace WebInstaller
         }
 	}
 }
-

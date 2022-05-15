@@ -49,4 +49,4 @@ else
 fi
 
 unzip /tmp/changes.zip -d /tmp/changes
-rsync -av --exclude 'removed.json' /tmp/changes/ ./ 
+rsync -av --exclude 'removed.json' /tmp/changes/ ./
