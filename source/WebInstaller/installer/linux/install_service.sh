@@ -38,7 +38,7 @@ if [ -f ./manifest.json ]; then
   ## Send the manifest and get changes
   curl -X GET ${SERVER_ADDRESS}/files/zip \
     -H 'Content-Type: application/json' \
-    -d $(cat ./manifest.json) \
+    -d '@./manifest.json' \
     -o /tmp/changes.zip
 else
   ## Send an empty body and get everything
