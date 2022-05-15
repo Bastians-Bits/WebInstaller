@@ -1,8 +1,12 @@
 #/bin/bash
+PROTOCOL=http
+SERVER=192.168.178.66
+PORT=8080
+SERVER_ADDRESS=${PROTOCOL}://${SERVER}:${PORT}
 
 INSTALL_DIR=/Users/$(whoami)/Documents/webinstaller_test
-INSTALL_URL=http://localhost:8080/installer/linux
-FILE_DIR=http://localhost:8080/files/zip
+INSTALL_URL=${SERVER_ADDRESS}/installer/linux
+FILE_DIR=${SERVER_ADDRESS}/files/zip
 
 ## Move to target directory
 if [ ! -d ${INSTALL_DIR} ]; then 
@@ -22,6 +26,8 @@ if [[ "$1" != "no-update" ]]; then
   if [ -f ./${INSTALL_NAME} ]; then rm ./${INSTALL_NAME}; fi
   INSTALL_NAME=$(curl -O -J -L -v ${INSTALL_URL} 2>&1 | grep "Content-Disposition" | grep -Eo 'filename=[^;]+' -)
   if [ -f ./${INSTALL_NAME} ]; then echo "Failed to download the installation file"; exit 1; fi
+  /bin/bash ./{INSTALL_NAME} "no-update"
+  exit 1
 fi
 
 ## Clean up /tmp
@@ -30,13 +36,13 @@ if [ -d /tmp/changes ]; then rm -rf /tmp/changes; fi
   
 if [ -f ./manifest.json ]; then
   ## Send the manifest and get changes
-  curl -X GET http://localhost:8080/files/zip \
+  curl -X GET ${SERVER_ADDRESS}/files/zip \
     -H 'Content-Type: application/json' \
     -d $(cat ./manifest.json) \
     -o /tmp/changes.zip
 else
   ## Send an empty body and get everything
-  curl -X GET http://localhost:8080/files/zip \
+  curl -X GET ${SERVER_ADDRESS}/files/zip \
     -H 'Content-Type: application/json' \
     -d '{ "files": [] }' \
     -o /tmp/changes.zip
