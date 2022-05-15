@@ -21,10 +21,10 @@ pushd ${INSTALL_DIR}
 ## Create or Update the installation file
 if [[ "$1" != "no-update" ]]; then
   # cUrl has extremely limited possibility. To get the filename from the server, we first have to download it
-  INSTALL_NAME=$(curl -O -J -L -v ${INSTALL_URL} 2>&1 | grep "Content-Disposition" | grep -Eo 'filename=[^;]+' -)
+  INSTALL_NAME=$(curl -O -J -L -v ${INSTALL_URL} 2>&1 | grep "Content-Disposition" | grep -Eo 'filename=[^;]+' - | tr "=" "\n" | sed -n 2p)
   if [ "${INSTALL_NAME}" == "" ]; then echo "Failed to reach the sever"; exit 1; fi
   if [ -f ./${INSTALL_NAME} ]; then rm ./${INSTALL_NAME}; fi
-  INSTALL_NAME=$(curl -O -J -L -v ${INSTALL_URL} 2>&1 | grep "Content-Disposition" | grep -Eo 'filename=[^;]+' -)
+  INSTALL_NAME=$(curl -O -J -L -v ${INSTALL_URL} 2>&1 | grep "Content-Disposition" | grep -Eo 'filename=[^;]+' - | tr "=" "\n" | sed -n 2p)
   if [ -f ./${INSTALL_NAME} ]; then echo "Failed to download the installation file"; exit 1; fi
   /bin/bash ./${INSTALL_NAME} "no-update"
   exit 1
