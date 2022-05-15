@@ -45,7 +45,7 @@ namespace WebInstaller
 			ZipArchiveEntry manifestEntry = zipArchive.CreateEntry("/manifest.json", CompressionLevel.Fastest);
 			using (Stream entryStream = manifestEntry.Open())
             {
-				using MemoryStream memStream = new(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(newManifest)));
+				using MemoryStream memStream = new(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(newManifest, new JsonSerializerOptions() { WriteIndented = true })));
 				await memStream.CopyToAsync(entryStream);
             }
 			manifestEntry.ExternalAttributes = manifestEntry.ExternalAttributes | (Convert.ToInt32("664", 8) << 16);
@@ -55,7 +55,7 @@ namespace WebInstaller
             {
 				Changeset deleteChangeset = new() { Changes = new List<FileChange>() };
 				((List<FileChange>)deleteChangeset.Changes).AddRange(changeset.Changes.Where(w => w.ChangeType.Equals(ChangeType.D)));
-				using MemoryStream memStream = new(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(deleteChangeset)));
+				using MemoryStream memStream = new(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(deleteChangeset, new JsonSerializerOptions() { WriteIndented = true })));
 				await memStream.CopyToAsync(entryStream);
 			}
 			deleteEntry.ExternalAttributes = deleteEntry.ExternalAttributes | (Convert.ToInt32("664", 8) << 16);

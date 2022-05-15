@@ -44,6 +44,6 @@ app.MapGet("files/{archiveType}", async ([FromBody] Manifest manifest, string ar
         return Results.NoContent();
 
     return Results.File(archive, MediaTypeNames.Application.Zip, $"changes.{archiveType}");
-} );
+});
 
 app.Run();
