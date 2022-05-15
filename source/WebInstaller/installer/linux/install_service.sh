@@ -26,7 +26,7 @@ if [[ "$1" != "no-update" ]]; then
   if [ -f ./${INSTALL_NAME} ]; then rm ./${INSTALL_NAME}; fi
   INSTALL_NAME=$(curl -O -J -L -v ${INSTALL_URL} 2>&1 | grep "Content-Disposition" | grep -Eo 'filename=[^;]+' -)
   if [ -f ./${INSTALL_NAME} ]; then echo "Failed to download the installation file"; exit 1; fi
-  /bin/bash ./{INSTALL_NAME} "no-update"
+  /bin/bash ./${INSTALL_NAME} "no-update"
   exit 1
 fi
 
