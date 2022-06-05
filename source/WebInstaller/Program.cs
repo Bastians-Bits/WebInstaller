@@ -1,5 +1,6 @@
 ﻿using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WebInstaller;
 using WebInstaller.Model;
 
@@ -31,7 +32,7 @@ app.MapGet("/manifest", () =>
     return Results.Ok(new ManifestHelper().Load(configuration.Files));
 });
 
-app.MapGet("/compare", ([FromBody] Manifest manifest) =>
+app.MapGet("/compare", ([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] Manifest manifest) =>
 {
     return Results.Ok(new ManifestHelper().Compare(manifest, configuration.Files));
 });

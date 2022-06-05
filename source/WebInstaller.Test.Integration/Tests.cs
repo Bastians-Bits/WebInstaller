@@ -11,7 +11,7 @@ namespace WebInstaller.Test.Integration;
 
 public class Tests
 {
-    [Fact]
+    [Fact(DisplayName = "Test to get a manifest")]
     public async void Test_Manifest()
     {
         await using var server = new ServerApplication();
@@ -21,7 +21,7 @@ public class Tests
         Assert.Equal(7, manifest?.Files.Count);
     }
 
-    [Fact]
+    [Fact(DisplayName = "Test for the comparator to register added items")]
     public async void Test_Compare_Added()
     {
         await using var server = new ServerApplication();
@@ -36,12 +36,12 @@ public class Tests
             Content = new StringContent(JsonConvert.SerializeObject(currentManifest), System.Text.Encoding.UTF8, MediaTypeNames.Application.Json)
         };
 
-        var changelist = await (await client.SendAsync(requestMessage)).Content.ReadFromJsonAsync<Changeset>(); ;
+        var changelist = await (await client.SendAsync(requestMessage)).Content.ReadFromJsonAsync<Changeset>();
 
         Assert.Equal(ChangeType.A, changelist?.Changes[0].ChangeType);
     }
 
-    [Fact]
+    [Fact(DisplayName = "Test for the comparator to register modified items")]
     public async void Test_Compare_Modifed()
     {
         await using var server = new ServerApplication();
@@ -58,12 +58,12 @@ public class Tests
             Content = new StringContent(JsonConvert.SerializeObject(currentManifest), System.Text.Encoding.UTF8, MediaTypeNames.Application.Json)
         };
 
-        var changelist = await (await client.SendAsync(requestMessage)).Content.ReadFromJsonAsync<Changeset>(); ;
+        var changelist = await (await client.SendAsync(requestMessage)).Content.ReadFromJsonAsync<Changeset>();
 
         Assert.Equal(ChangeType.M, changelist?.Changes[0].ChangeType);
     }
 
-    [Fact]
+    [Fact(DisplayName = "Test for the comparator to register deleted items")]
     public async void Test_Compare_Deleted()
     {
         await using var server = new ServerApplication();
@@ -78,12 +78,28 @@ public class Tests
             Content = new StringContent(JsonConvert.SerializeObject(currentManifest), System.Text.Encoding.UTF8, MediaTypeNames.Application.Json)
         };
 
-        var changelist = await (await client.SendAsync(requestMessage)).Content.ReadFromJsonAsync<Changeset>(); ;
+        var changelist = await (await client.SendAsync(requestMessage)).Content.ReadFromJsonAsync<Changeset>();
 
         Assert.Equal(ChangeType.D, changelist?.Changes[0].ChangeType);
     }
 
-    [Fact]
+    [Fact(DisplayName = "Test for the comparator to register an empty manifest")]
+    public async void Test_Compare_Empty()
+    {
+        await using var server = new ServerApplication();
+        var client = server.CreateClient();
+
+        HttpRequestMessage requestMessage = new()
+        {
+            RequestUri = new Uri("/compare")
+        };
+
+        var changelist = await (await client.SendAsync(requestMessage)).Content.ReadFromJsonAsync<Changeset>();
+
+        Assert.Equal(7, changelist?.Changes.Count);
+    }
+
+    [Fact(DisplayName = "Test to get the linux installation script")]
     public async void Test_Install_Linux()
     {
         await using var server = new ServerApplication();
@@ -95,7 +111,7 @@ public class Tests
         Assert.Equal("application/x-sh", responseMessage.Content.Headers.ContentType?.ToString());
     }
 
-    [Fact]
+    [Fact(DisplayName = "Test to throw an exception if the installation architectur is unkown")]
     public async void Test_Install_Unknown()
     {
         await using var server = new ServerApplication();
@@ -104,7 +120,7 @@ public class Tests
         await Assert.ThrowsAsync<Exception>(async () => await client.GetAsync("/installer/error"));
     }
 
-    [Fact]
+    [Fact(DisplayName = "Test there are no changed files to archive")]
     public async void Test_Files_NoChanges()
     {
         await using var server = new ServerApplication();
@@ -123,7 +139,7 @@ public class Tests
         Assert.Equal(HttpStatusCode.NoContent, responseMessage.StatusCode);
     }
 
-    [Fact]
+    [Fact(DisplayName = "Test there are changed files to archive")]
     public async void Test_Files_Ok()
     {
         await using var server = new ServerApplication();
@@ -143,7 +159,7 @@ public class Tests
         Assert.Equal(HttpStatusCode.OK, responseMessage.StatusCode);
     }
 
-    [Fact]
+    [Fact(DisplayName = "Test to throw an exception on unsupported archive types")]
     public async void Test_Files_NotImplemented()
     {
         await using var server = new ServerApplication();
